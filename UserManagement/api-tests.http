@@ -15,6 +15,7 @@ Content-Type: application/json
   "email": "bsse1406@iit.du.ac.bd"
 }
 
+
 ### Assign Role
 POST http://localhost:8080/users/{{userId}}/assign-role/{{roleId}}
 
