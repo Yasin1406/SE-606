@@ -50,4 +50,43 @@ class UserServiceTest {
     void createUser_blankName_throwsException() {
         assertThrows(IllegalArgumentException.class, () -> userService.createUser("", "john@example.com"));
     }
+
+    @Test
+    void createUser_nullName_throwsException() {
+        assertThrows(IllegalArgumentException.class, () -> userService.createUser(null, "john@example.com"));
+    }
+
+    @Test
+    void createUser_invalidEmail_throwsException() {
+        assertThrows(IllegalArgumentException.class, () -> userService.createUser("John Doe", "invalid-email"));
+    }
+
+    @Test
+    void createUser_nullEmail_throwsException() {
+        assertThrows(IllegalArgumentException.class, () -> userService.createUser("John Doe", null));
+    }
+
+    @Test
+    void assignRoleToUser_invalidUserId_throwsException() {
+        UUID invalidUserId = UUID.randomUUID();
+        UUID roleId = UUID.randomUUID();
+        when(userRepository.findById(invalidUserId)).thenReturn(Optional.empty());
+        assertThrows(IllegalArgumentException.class, () -> userService.assignRoleToUser(invalidUserId, roleId));
+    }
+
+    @Test
+    void assignRoleToUser_invalidRoleId_throwsException() {
+        UUID userId = UUID.randomUUID();
+        UUID invalidRoleId = UUID.randomUUID();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(roleRepository.findById(invalidRoleId)).thenReturn(Optional.empty());
+        assertThrows(IllegalArgumentException.class, () -> userService.assignRoleToUser(userId, invalidRoleId));
+    }
+
+    @Test
+    void getUserDetails_invalidUserId_throwsException() {
+        UUID invalidUserId = UUID.randomUUID();
+        when(userRepository.findById(invalidUserId)).thenReturn(Optional.empty());
+        assertThrows(IllegalArgumentException.class, () -> userService.getUserDetails(invalidUserId));
+    }
 }
